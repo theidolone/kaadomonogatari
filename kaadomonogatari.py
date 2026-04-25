@@ -1,0 +1,68 @@
+import tkinter as tk
+from tkinter import messagebox
+from PIL import Image, ImageTk
+import os, sys, random
+#-------------------------------------------------------
+if getattr(sys, 'frozen', False):
+    cwd = os.path.dirname(sys.executable)
+
+else:
+    cwd = os.path.dirname(os.path.abspath(__file__))
+#--------------------------------------------------------
+def resource_path(relative_path):
+
+    if getattr(sys, 'frozen', False):
+        base_path = getattr(sys, "_MEIPASS", os.path.dirname(sys.executable))
+
+    else:
+        base_path = cwd
+
+    return os.path.abspath(os.path.join(base_path, relative_path))
+#----------------------------------------------------------------------------------------------------------------------------------
+lolis = {
+    "Hachikuji Mayoi.png" : "Hey mister, I need your credit card to buy love at the convenience store for ¥298!",
+    "Oshino Shinobu.png"  : "I assure you my master, I absolutely need your credit card to buy the new donut release from Mister Donuts. It's critical!" ,
+    "Sengoku Nadeko.png"  : "A-ah Onii-chan.. Can Nadeko p-please have your credit c-card..? I'll be good with it I s-swear..." ,
+    "Ononoki Yotsugi.png" : "Devil boy. I want to use your credit card for my own gain, I said with a posed look.",
+}
+#----------------------------------------------------------------------------------------------------------------------------------
+def kaadomonogatari():
+    display = random.choice(list(lolis.keys()))
+    text = lolis[display]
+#------------------------------------------------------------
+    root = tk.Tk()
+    root.title(os.path.splitext(display)[0])
+    root.iconbitmap(resource_path("smirk.ico"))
+    root.attributes("-topmost", True)
+#------------------------------------------------------------
+    root.update_idletasks()
+    w = root.winfo_reqwidth()
+    h = root.winfo_reqheight()
+    x = (root.winfo_screenwidth() // 2) - (w // 2)
+    y = (root.winfo_screenheight() // 2) - (h // 2)
+
+    root.minsize(450,200)
+    root.geometry(f"{w}x{h}+{x}+{y}")
+#-------------------------------------------------------------
+    img = Image.open(resource_path(display))
+    img = img.resize((175, 150))
+    readyImg = ImageTk.PhotoImage(img)
+    img_label = tk.Label(root, image=readyImg)
+    img_label.grid(row=0, column=0, rowspan=3, padx=10, pady=10, sticky="n")
+
+    text_label = tk.Label(root, text=text, wraplength=200, justify="center")
+    text_label.grid(row=0, column=1, padx=10, pady=10, sticky="w")
+
+    entry = tk.Entry(root)
+    entry.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
+
+    button = tk.Button(root, text="Submit")
+    button.grid(row=2, column=1, padx=10, pady=10, sticky="e")
+
+    root.grid_columnconfigure(1, weight=1)
+
+    root.img = readyImg
+#-------------------------------------------------------------
+    root.mainloop()
+
+kaadomonogatari()
