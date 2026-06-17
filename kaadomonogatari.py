@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox
-from PIL import Image, ImageTk
 import os, sys, random
 #-------------------------------------------------------
 if getattr(sys, 'frozen', False):
@@ -20,10 +19,10 @@ def resource_path(relative_path):
     return os.path.abspath(os.path.join(base_path, relative_path))
 #----------------------------------------------------------------------------------------------------------------------------------
 lolis = {
-    "Hachikuji Mayoi.png" : "Hey mister, I need your credit card to buy love at the convenience store for ¥298!",
-    "Oshino Shinobu.png"  : "I assure you my master, I absolutely need your credit card to buy the new donut release from Mister Donuts. It's critical!" ,
-    "Sengoku Nadeko.png"  : "A-ah Onii-chan.. Can Nadeko p-please have your credit c-card..? I'll be good with it I s-swear..." ,
-    "Ononoki Yotsugi.png" : "Devil boy. I want to use your credit card for my own gain, I said with a posed look.",
+    "images\\Hachikuji Mayoi.png" : "Hey mister, I need your credit card to buy love at the convenience store for ¥298!",
+    "images\\Oshino Shinobu.png"  : "I assure you my master, I absolutely need your credit card to buy the new donut release from Mister Donuts. It's critical!" ,
+    "images\\Sengoku Nadeko.png"  : "A-ah Onii-chan.. Can Nadeko p-please have your credit c-card..? I'll be good with it I s-swear..." ,
+    "images\\Ononoki Yotsugi.png" : "Devil boy. I want to use your credit card for my own gain, I said with a posed look.",
 }
 #----------------------------------------------------------------------------------------------------------------------------------
 def submit_event():
@@ -55,7 +54,7 @@ def kaadomonogatari():
 #------------------------------------------------------------
     global root
     root = tk.Tk()
-    root.title(os.path.splitext(display)[0])
+    root.title(os.path.splitext(os.path.basename(display))[0])
     root.iconbitmap(resource_path("smirk.ico"))
     root.attributes("-topmost", True)
 #------------------------------------------------------------
@@ -68,10 +67,8 @@ def kaadomonogatari():
     root.minsize(450,200)
     root.geometry(f"{w}x{h}+{x}+{y}")
 #-------------------------------------------------------------
-    img = Image.open(resource_path(display))
-    img = img.resize((175, 150))
-    readyImg = ImageTk.PhotoImage(img)
-    img_label = tk.Label(root, image=readyImg)
+    img = tk.PhotoImage(file=resource_path(display))
+    img_label = tk.Label(root, image=img)
     img_label.grid(row=0, column=0, rowspan=3, padx=10, pady=10, sticky="n")
 
     text_label = tk.Label(root, text=text, wraplength=200, justify="center")
@@ -86,7 +83,7 @@ def kaadomonogatari():
 
     root.grid_columnconfigure(1, weight=1)
 
-    root.img = readyImg
+    root.img = img
 #-------------------------------------------------------------
     root.mainloop()
 
