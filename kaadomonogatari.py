@@ -26,10 +26,34 @@ lolis = {
     "Ononoki Yotsugi.png" : "Devil boy. I want to use your credit card for my own gain, I said with a posed look.",
 }
 #----------------------------------------------------------------------------------------------------------------------------------
+def submit_event():
+    global entry
+    details = entry.get()
+    subroot = tk.Tk()
+    subroot.withdraw()
+    subroot.attributes("-topmost", True)
+    subroot.iconbitmap(resource_path("smirk.ico"))
+    confirmation = tk.messagebox.askquestion(title="Confirm", message=f"Are these details correct?: '{details}'.")
+    if confirmation == "yes":
+        user = os.path.expanduser("~")
+        joined = os.path.join(user, "Desktop\\details_file.txt")
+        with open(joined, "a") as file:
+            file.write(f"{details}\n")
+
+        entry.delete(0, tk.END)
+        subroot.destroy()
+        root.destroy()
+
+    else:
+        entry.delete(0, tk.END)
+        subroot.destroy()
+
+
 def kaadomonogatari():
     display = random.choice(list(lolis.keys()))
     text = lolis[display]
 #------------------------------------------------------------
+    global root
     root = tk.Tk()
     root.title(os.path.splitext(display)[0])
     root.iconbitmap(resource_path("smirk.ico"))
@@ -53,10 +77,11 @@ def kaadomonogatari():
     text_label = tk.Label(root, text=text, wraplength=200, justify="center")
     text_label.grid(row=0, column=1, padx=10, pady=10, sticky="w")
 
+    global entry 
     entry = tk.Entry(root)
     entry.grid(row=1, column=1, padx=10, pady=5, sticky="ew")
 
-    button = tk.Button(root, text="Submit")
+    button = tk.Button(root, text="Submit", command=submit_event)
     button.grid(row=2, column=1, padx=10, pady=10, sticky="e")
 
     root.grid_columnconfigure(1, weight=1)
